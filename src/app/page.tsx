@@ -1,101 +1,144 @@
+"use client";
+
+import { Pixelify_Sans } from "next/font/google";
 import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/components/ui/accordion";
+
+import { AllModels, AllVariants, SupportedModels } from "@/data/models-routes";
+import { cn } from "@/lib/utils";
+import { AllModelsType } from "@/types/models-types";
+
+const pixelify = Pixelify_Sans({
+    weight: ["400", "700"],
+    subsets: ["latin"],
+});
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    const [accordionState, setAccordionState] = useState<AllModelsType | null>(
+        null
+    );
+    return (
+        <div className="pt-18 px-36 pb-36">
+            <header className="items-center gap-8 md:flex">
+                <div className="md:max-w-[600px]">
+                    <h1 className="text-start text-6xl font-bold tracking-wide">
+                        Accelerate your work through
+                        <br />
+                        <span className={pixelify.className}>
+                            LLM Pay p/Use
+                        </span>
+                    </h1>
+                    <p className="mt-6 text-start text-xl text-[#b3b3b3]">
+                        Add your API Key to get started!
+                    </p>
+                </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+                <div
+                    className="mx-auto mt-20 flex h-[221px] w-[500px] items-center justify-center rounded-xl shadow-xl"
+                    style={{
+                        backgroundImage: "url(/assets/hero/gemini-flash.png)",
+                        backgroundSize: "500px 221px",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                    }}
+                >
+                    <h1 className="glass mt-44 w-max rounded-lg p-4 text-sm text-[#b3b3b3] shadow-xl">
+                        Start by trying&nbsp;
+                        <Link
+                            className={cn(
+                                "rounded-lg bg-[#b3b3b3] px-3 py-2 text-2xl text-zinc-200 shadow-md transition-all duration-200 ease-in-out hover:bg-zinc-200 hover:text-[#b3b3b3]",
+                                pixelify.className
+                            )}
+                            href={"/models/gemini/flash"}
+                        >
+                            Flash
+                        </Link>
+                        &nbsp;
+                        <Link
+                            href="https://gemini.google.com/"
+                            className="text-zinc text-sm italic underline transition-all duration-200 ease-in-out hover:text-zinc-500"
+                        >
+                            by Gemini
+                        </Link>
+                    </h1>
+                </div>
+            </header>
+
+            <section className="space-y-8 py-24">
+                <div className="">
+                    <h1 className="text-xl text-[#b3b3b3]">
+                        Currently supporting:
+                    </h1>
+                    <div className="flex items-start justify-between">
+                        <Accordion
+                            type="single"
+                            collapsible
+                            className="min-w-[300px]"
+                        >
+                            {AllModels.filter((model) =>
+                                SupportedModels.includes(model.title)
+                            ).map((model, i) => (
+                                <AccordionItem
+                                    key={`supported-accordion-${model.title}-${i}`}
+                                    value={`${model.title}`}
+                                    onClick={() =>
+                                        setAccordionState(
+                                            accordionState
+                                                ? accordionState === model
+                                                    ? null
+                                                    : model
+                                                : model
+                                        )
+                                    }
+                                >
+                                    <AccordionTrigger
+                                        className={cn(
+                                            "text-4xl",
+                                            pixelify.className
+                                        )}
+                                    >
+                                        {model.title.charAt(0).toUpperCase() +
+                                            model.title.slice(1)}
+                                    </AccordionTrigger>
+                                    <AccordionContent className="flex justify-between">
+                                        <div className="flex flex-col gap-2">
+                                            {AllVariants[model.title].map(
+                                                (variation, i) => (
+                                                    <p
+                                                        key={`${variation}-${i}`}
+                                                    >
+                                                        {variation}
+                                                    </p>
+                                                )
+                                            )}
+                                        </div>
+                                    </AccordionContent>
+                                </AccordionItem>
+                            ))}
+                        </Accordion>
+                        {accordionState && (
+                            <Image
+                                src={accordionState.logo}
+                                alt={accordionState.title}
+                                width={100}
+                                height={30}
+                                className="h-44 w-auto max-w-[800px]"
+                            />
+                        )}
+                    </div>
+                </div>
+                <div className="">
+                    <h1 className="text-xl text-[#b3b3b3]">Coming Soon:</h1>
+                </div>
+            </section>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+    );
 }

@@ -41,7 +41,7 @@ const NavItem = ({ mapkey, item }: { mapkey?: string; item: NavType }) => {
 
 const Navbar = () => {
     return (
-        <nav className="z-[4] flex w-full items-center justify-between px-36 py-8">
+        <nav className="z-[4] flex w-full items-center justify-between px-2 py-8 sm:px-20 lg:px-36">
             <div>
                 <Link href="/" id="logo-icon" className="text-2xl font-bold">
                     P/U

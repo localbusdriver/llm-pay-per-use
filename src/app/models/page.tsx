@@ -1,26 +1,31 @@
 "use client";
 
+import { Pixelify_Sans } from "next/font/google";
 import { useRef, useState } from "react";
 
-import { Button } from "@/components/ui/button";
+import MessageSendContainer from "@/components/model/message-send-container";
+import ModelSelect from "@/components/model/model-selector";
+import ParameterSelector from "@/components/model/parameter-selector";
+import ResponseDisplayContainer from "@/components/model/response-display-container";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 
-import {
-    AllModels,
-    AllVariants,
-    ModelsAndVariants,
-    SupportedModels,
-} from "@/data/models-routes";
+import { AllVariants, SupportedModels } from "@/data/models-routes";
 import { markdownToHtml } from "@/lib/utils";
+
+const pixelifySans = Pixelify_Sans({
+    style: "normal",
+    weight: "400",
+    subsets: ["latin"],
+});
 
 const Page = () => {
     const [error, setError] = useState<string>();
@@ -31,7 +36,7 @@ const Page = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const responseRef = useRef<HTMLDivElement>(null);
 
-    const handleChangePrompt = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const handleChangePrompt = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPrompt(e.target.value);
     };
     const handleChangeKey = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,78 +95,35 @@ const Page = () => {
     };
 
     return (
-        <main className="px-36">
-            <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                    <Label htmlFor="model-select">Model:</Label>
-                    <ModelSelect
-                        id="model-select"
-                        value={model}
-                        onChange={setModel}
-                        options={SupportedModels}
+        <main className="w-screen px-2 sm:px-20 lg:px-36">
+            <section className="mx-auto flex flex-col gap-4 sm:w-5/6 lg:w-3/5 xl:flex-row">
+                <ParameterSelector
+                    model={model}
+                    setModel={setModel}
+                    variant={variant}
+                    setVariant={setVariant}
+                    key={key}
+                    setKey={setKey}
+                    className=""
+                />
+                <div className="flex w-full flex-col items-center gap-2">
+                    <ResponseDisplayContainer
+                        model={model}
+                        responseRef={responseRef}
+                        loading={loading}
+                        error={error}
+                        className="w-full"
                     />
-                    <ModelSelect
-                        id="variant-select"
-                        value={variant}
-                        onChange={setVariant}
-                        options={AllVariants[model]}
+                    <MessageSendContainer
+                        model={model}
+                        handleChangePrompt={handleChangePrompt}
+                        requestData={requestData}
+                        className="w-full"
                     />
                 </div>
-                <div className="flex items-center justify-center gap-2">
-                    <Label htmlFor="key-input">Your key:</Label>
-                    <Input
-                        id="key-input"
-                        onChange={handleChangeKey}
-                        value={key}
-                        className="w-[200px]"
-                    />
-                </div>
-            </div>
-            <div>
-                <h1 className="text-2xl">Response:</h1>
-                {error && <p>{error}</p>}
-                {loading && <p>Loading...</p>}
-                <div ref={responseRef}></div>
-            </div>
-
-            <Textarea onChange={handleChangePrompt} value={prompt} />
-            <Button onClick={requestData} disabled={loading}>
-                {"Send"}
-            </Button>
+            </section>
         </main>
     );
 };
 
 export default Page;
-
-function ModelSelect({
-    id,
-    value,
-    onChange,
-    options,
-}: {
-    id: string;
-    value: string;
-    onChange: React.Dispatch<React.SetStateAction<string>>;
-    options: string[];
-}) {
-    return (
-        <Select value={value} onValueChange={onChange}>
-            <SelectTrigger id={id} className="w-[150px]">
-                <SelectValue placeholder="Select a model" />
-            </SelectTrigger>
-            <SelectContent>
-                {options
-                    ? options.map((option, i) => (
-                          <SelectItem key={option + i} value={option}>
-                              {id === "model-select"
-                                  ? option.charAt(0).toUpperCase() +
-                                    option.slice(1)
-                                  : option}
-                          </SelectItem>
-                      ))
-                    : null}
-            </SelectContent>
-        </Select>
-    );
-}

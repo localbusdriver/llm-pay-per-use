@@ -26,23 +26,23 @@ export default function Home() {
         null
     );
     return (
-        <div className="pt-18 px-36 pb-36">
-            <header className="items-center gap-8 md:flex">
+        <div className="pt-18 px-2 pb-36 sm:px-20 lg:px-36">
+            <header className="mt-20 flex flex-col items-center justify-between gap-8 lg:flex-row">
                 <div className="md:max-w-[600px]">
-                    <h1 className="text-start text-6xl font-bold tracking-wide">
+                    <h1 className="text-center text-6xl font-bold tracking-wide lg:text-start">
                         Accelerate your work through
                         <br />
                         <span className={pixelify.className}>
                             LLM Pay p/Use
                         </span>
                     </h1>
-                    <p className="mt-6 text-start text-xl text-[#b3b3b3]">
+                    <p className="mt-6 text-center text-xl text-[#b3b3b3] lg:text-start">
                         Add your API Key to get started!
                     </p>
                 </div>
 
                 <div
-                    className="mx-auto mt-20 flex h-[221px] w-[500px] items-center justify-center rounded-xl shadow-xl"
+                    className="flex h-[221px] min-w-[500px] max-w-[500px] items-center justify-center rounded-xl px-0 shadow-xl"
                     style={{
                         backgroundImage: "url(/assets/hero/gemini-flash.png)",
                         backgroundSize: "500px 221px",
@@ -57,7 +57,7 @@ export default function Home() {
                                 "rounded-lg bg-[#b3b3b3] px-3 py-2 text-2xl text-zinc-200 shadow-md transition-all duration-200 ease-in-out hover:bg-zinc-200 hover:text-[#b3b3b3]",
                                 pixelify.className
                             )}
-                            href={"/models/gemini/flash"}
+                            href={"/models"}
                         >
                             Flash
                         </Link>
@@ -74,14 +74,14 @@ export default function Home() {
 
             <section className="space-y-8 py-24">
                 <div className="">
-                    <h1 className="text-xl text-[#b3b3b3]">
+                    <h1 className="text-center text-xl text-[#b3b3b3] lg:text-start">
                         Currently supporting:
                     </h1>
-                    <div className="flex items-start justify-between">
+                    <div className="flex flex-col justify-between gap-12 md:items-center lg:flex-row lg:items-start">
                         <Accordion
                             type="single"
                             collapsible
-                            className="min-w-[300px]"
+                            className="mx-auto min-w-[350px] md:mx-0 md:w-[600px]"
                         >
                             {AllModels.filter((model) =>
                                 SupportedModels.includes(model.title)
@@ -129,14 +129,16 @@ export default function Home() {
                                 src={accordionState.logo}
                                 alt={accordionState.title}
                                 width={100}
-                                height={30}
-                                className="h-44 w-auto max-w-[800px]"
+                                height={40}
+                                className="mx-auto h-auto max-w-[800px] sm:mx-0 md:max-w-[500px] lg:h-44 lg:w-auto"
                             />
                         )}
                     </div>
                 </div>
                 <div className="">
-                    <h1 className="text-xl text-[#b3b3b3]">Coming Soon:</h1>
+                    <h1 className="text-center text-xl text-[#b3b3b3] lg:text-start">
+                        Coming Soon:
+                    </h1>
                 </div>
             </section>
         </div>

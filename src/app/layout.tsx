@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 
-import Footer from "@/components/footer/footer";
 import Navbar from "@/components/ui/navbar";
 
 import "./globals.css";
@@ -25,9 +24,8 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className={`${montserrat.className}`}>
-                <Navbar />
+                
                 {children}
-                <Footer />
             </body>
         </html>
     );

@@ -1,111 +1,68 @@
-"use client";
+tsx
+// src/app/models/page.tsx
+'use client';
 
-import { Pixelify_Sans } from "next/font/google";
-import { useRef, useState } from "react";
+import React, { useState, useRef, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 
-import MessageSendContainer from "@/components/model/message-send-container";
-import ModelSelect from "@/components/model/model-selector";
-import ParameterSelector from "@/components/model/parameter-selector";
-import ResponseDisplayContainer from "@/components/model/response-display-container";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { fetchGeminiModels, fetchOpenAIModels } from '@/lib/model-fetch';
 
-import { AllVariants, SupportedModels } from "@/data/models-routes";
-import { markdownToHtml } from "@/lib/utils";
+import ResponseDisplayContainer from '@/components/model/response-display-container';
+import MessageSendContainer from '@/components/model/message-
+send-container';
+import ParameterSelector from '@/components/model/parameter-selector';
 
-const pixelifySans = Pixelify_Sans({
-    style: "normal",
-    weight: "400",
-    subsets: ["latin"],
-});
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
-const Page = () => {
-    const [error, setError] = useState<string>();
-    const [prompt, setPrompt] = useState<string>("");
-    const [model, setModel] = useState<string>(SupportedModels[0]);
-    const [variant, setVariant] = useState<string>(AllVariants[model][0]);
-    const [key, setKey] = useState<string>("");
+interface ApiResponse {
+    response: any; // Adjust the type according to your actual response structure
+    usage: any; // Adjust the type according to your actual response structure
+}
+
+const ModelPage = () => {
+    const [prompt, setPrompt] = useState<string>('');
+    const [response, setResponse] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
-    const responseRef = useRef<HTMLDivElement>(null);
+    const [error, setError] = useState<string >("");
+    const [model, setModel] = useState<string>('gemini-pro');
+    const [variant, setVariant] = useState<string>('gemini-pro');
+    const [key, setKey] = useState<string>('');
 
-    const handleChangePrompt = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setPrompt(e.target.value);
-    };
-    const handleChangeKey = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setKey(e.target.value);
+    const responseRef = useRef<HTMLDivElement>(null);
+    const params = useSearchParams();
+
+    const handleChangePrompt = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setPrompt(event.target.value);
     };
 
     const requestData = async () => {
         setLoading(true);
-
-        if (!prompt) {
-            setError("Please enter a prompt");
-            setLoading(false);
-            return;
-        }
-        if (!model) {
-            setError("Please select a model");
-            setLoading(false);
-            return;
-        }
-
-        if (!variant) {
-            setError("Please select a variant");
-            setLoading(false);
-            return;
-        }
-
+        setError("");
         try {
-            const response = await fetch("/api/models", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    model: model.toLowerCase(),
-                    variant: variant.toLowerCase(),
-                    prompt: prompt,
-                    key: key,
-                }),
-            });
-            const data = await response.json();
-            console.log(data);
-            if (responseRef.current) {
-                setPrompt("");
-                responseRef.current.innerHTML = markdownToHtml(
-                    data.candidates[0].content.parts[0].text
-                );
+            let apiResponse: ApiResponse;
+            if (model === 'gemini') {
+                apiResponse = await fetchGeminiModels(key, variant, prompt);
+            } else if (model === 'openai') {
+                apiResponse = await fetchOpenAIModels(key, variant, prompt);
             } else {
-                setError("Error fetching data");
+                throw new Error('Invalid model selected');
             }
-        } catch (error) {
-            console.error(error);
-            setError("Error fetching data");
+            console.log('api response', apiResponse);
+            setResponse(apiResponse.response);
+            // Additional logic to handle usage if needed
+        } catch (err: any) {
+            setError(err.message || 'An unexpected error occurred.');
         } finally {
             setLoading(false);
         }
     };
-
     return (
         <main className="w-screen px-2 sm:px-20 lg:px-36">
             <section className="mx-auto flex flex-col gap-4 sm:w-5/6 lg:w-3/5 xl:flex-row">
-                <ParameterSelector
-                    model={model}
-                    setModel={setModel}
-                    variant={variant}
-                    setVariant={setVariant}
-                    key={key}
-                    setKey={setKey}
-                    className=""
-                />
+                {/* Sidebar for Model and Key Selection */}
+                
                 <div className="flex w-full flex-col items-center gap-2">
                     <ResponseDisplayContainer
                         model={model}
@@ -119,6 +76,7 @@ const Page = () => {
                         handleChangePrompt={handleChangePrompt}
                         requestData={requestData}
                         className="w-full"
+                        prompt={prompt}
                     />
                 </div>
             </section>
@@ -126,4 +84,4 @@ const Page = () => {
     );
 };
 
-export default Page;
+export default ModelPage;

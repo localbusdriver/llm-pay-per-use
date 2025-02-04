@@ -5,16 +5,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
+import Footer from "@/components/footer/footer";
 import {
     Accordion,
     AccordionContent,
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion";
-
 import Navbar from "@/components/ui/navbar";
 
-import Footer from "@/components/footer/footer"
 import { AllModels, AllVariants, SupportedModels } from "@/data/models-routes";
 import { cn } from "@/lib/utils";
 import { AllModelsType } from "@/types/models-types";
@@ -25,11 +24,10 @@ const pixelify = Pixelify_Sans({
 });
 
 export default function Home() {
-
     return (
         <>
             <Navbar />
-            <main className="px-2 sm:px-20 lg:px-36 pb-36 pt-18">
+            <main className="pt-18 px-2 pb-36 sm:px-20 lg:px-36">
                 <Header />
                 <SupportingModels />
             </main>
@@ -42,10 +40,15 @@ const Header = () => {
     return (
         <header className="mt-20 flex flex-col items-center justify-between gap-8 lg:flex-row">
             <div className="md:max-w-[600px]">
-                <h1 className="text-center text-xl font-bold tracking-wide lg:text-start text-black/[0.4]">
+                <h1 className="text-center text-xl font-bold tracking-wide text-black/[0.4] lg:text-start">
                     Accelerate your work through
                     <br />
-                    <span className={cn(pixelify.className, "text-6xl text-primary")}>
+                    <span
+                        className={cn(
+                            pixelify.className,
+                            "text-6xl text-primary"
+                        )}
+                    >
                         LLM Pay p/Use
                     </span>
                 </h1>
@@ -84,8 +87,8 @@ const Header = () => {
                 </h1>
             </div>
         </header>
-    )
-}
+    );
+};
 
 const SupportingModels = () => {
     const [accordionState, setAccordionState] = useState<AllModelsType | null>(
@@ -132,9 +135,7 @@ const SupportingModels = () => {
                                     <div className="flex flex-col gap-2">
                                         {AllVariants[model.title].map(
                                             (variation, i) => (
-                                                <p
-                                                    key={`${variation}-${i}`}
-                                                >
+                                                <p key={`${variation}-${i}`}>
                                                     {variation}
                                                 </p>
                                             )
@@ -161,5 +162,5 @@ const SupportingModels = () => {
                 </h1>
             </div>
         </section>
-    )
-}
+    );
+};

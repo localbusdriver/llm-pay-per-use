@@ -25,11 +25,13 @@ const MessageSendContainer = ({
     handleChangePrompt,
     requestData,
     className,
+    prompt,
 }: {
     model: string;
     handleChangePrompt: (e: React.ChangeEvent<HTMLInputElement>) => void;
     requestData: () => Promise<void>;
     className?: string;
+    prompt?: string;
 }) => {
     const inputPlaceholders = [
         "What's on your mind?",

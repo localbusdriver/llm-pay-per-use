@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
+import { AnimatePresence, motion } from "framer-motion";
+
 import Footer from "@/components/footer/footer";
 import {
     Accordion,
@@ -96,7 +98,7 @@ const SupportingModels = () => {
     );
     return (
         <section className="space-y-8 py-24">
-            <div className="">
+            <div>
                 <h1 className="text-center text-xl text-[#b3b3b3] lg:text-start">
                     Currently supporting:
                 </h1>
@@ -145,15 +147,23 @@ const SupportingModels = () => {
                             </AccordionItem>
                         ))}
                     </Accordion>
-                    {accordionState && (
+                    <AnimatePresence mode="wait">
+                        {accordionState && (
+                            <motion.div
+                                 key={accordionState.title}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -20 }}
+                                transition={{ duration: 0.3 }}
+                            >
                         <Image
                             src={accordionState.logo}
                             alt={accordionState.title}
                             width={100}
                             height={40}
                             className="mx-auto h-auto max-w-[800px] sm:mx-0 md:max-w-[500px] lg:h-44 lg:w-auto"
-                        />
-                    )}
+                        /></motion.div>
+                    )}</AnimatePresence>
                 </div>
             </div>
             <div className="">

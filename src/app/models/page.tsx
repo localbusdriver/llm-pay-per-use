@@ -3,14 +3,12 @@
 
 import React, { useRef, useState } from "react";
 
-import { useSideBarContext } from "@/components/model/sidebar-page-context";
-
 import MessageSendContainer from "@/components/model/message-send-container";
 import ResponseDisplayContainer from "@/components/model/response-display-container";
+import { useSideBarContext } from "@/components/model/sidebar-page-context";
 
 import { fetchGeminiModels, fetchOpenAIModels } from "@/lib/model-fetch";
 
-// src/app/models/page.tsx
 
 interface ApiResponse {
     response: any; // Adjust the type according to your actual response structure
@@ -18,11 +16,7 @@ interface ApiResponse {
 }
 
 const ModelPage = () => {
-
-    const {
-        model, variant, key
-    } = useSideBarContext()
-
+    const { model, variant, key } = useSideBarContext();
     const [prompt, setPrompt] = useState<string>("");
     const [response, setResponse] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);

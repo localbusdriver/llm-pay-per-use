@@ -1,5 +1,6 @@
 "use client";
 
+import { useSideBarContext } from "@/components/model/sidebar-page-context";
 import {
     Sidebar,
     SidebarContent,
@@ -8,8 +9,6 @@ import {
     SidebarHeader,
 } from "@/components/ui/sidebar";
 
-import { useSideBarContext } from "@/components/model/sidebar-page-context";
-
 const items = [
     {
         title: "llm in use",
@@ -17,14 +16,8 @@ const items = [
 ];
 
 const AppSidebar = () => {
-    const {
-        model,
-        setModel,
-        variant,
-        setVariant,
-        key,
-        setKey,
-    } = useSideBarContext();
+    const { model, setModel, variant, setVariant, key, setKey } =
+        useSideBarContext();
 
     return (
         <Sidebar>

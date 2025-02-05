@@ -18,7 +18,7 @@ export const SidebarContextProvider = ({
 }: {
     children: ReactNode;
 }) => {
-    const [model, setModel] = useState<string>("gemini-pro");
+    const [model, setModel] = useState<string>("gemini");
     const [variant, setVariant] = useState<string>("gemini-pro");
     const [key, setKey] = useState<string>("");
 

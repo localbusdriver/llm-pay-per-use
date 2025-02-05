@@ -150,20 +150,22 @@ const SupportingModels = () => {
                     <AnimatePresence mode="wait">
                         {accordionState && (
                             <motion.div
-                                 key={accordionState.title}
+                                key={accordionState.title}
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -20 }}
                                 transition={{ duration: 0.3 }}
                             >
-                        <Image
-                            src={accordionState.logo}
-                            alt={accordionState.title}
-                            width={100}
-                            height={40}
-                            className="mx-auto h-auto max-w-[800px] sm:mx-0 md:max-w-[500px] lg:h-44 lg:w-auto"
-                        /></motion.div>
-                    )}</AnimatePresence>
+                                <Image
+                                    src={accordionState.logo}
+                                    alt={accordionState.title}
+                                    width={100}
+                                    height={40}
+                                    className="mx-auto h-auto max-w-[800px] sm:mx-0 md:max-w-[500px] lg:h-44 lg:w-auto"
+                                />
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                 </div>
             </div>
             <div className="">

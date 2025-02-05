@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import AppSidebar from "@/components/model/side-bar";
-import { Button } from "@/components/ui/button";
+import { SidebarContextProvider } from "@/components/model/sidebar-page-context";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import {
     Tooltip,
@@ -37,43 +37,48 @@ const HomeIcon = () => {
     );
 };
 
-
-const TooltipWrapper = ({ children, content }: { children: React.ReactNode, content: string }) => {
+const TooltipWrapper = ({
+    children,
+    content,
+}: {
+    children: React.ReactNode;
+    content: string;
+}) => {
     return (
         <TooltipProvider>
             <Tooltip>
-                <TooltipTrigger className="">
-                    {children}
-                </TooltipTrigger>
+                <TooltipTrigger className="">{children}</TooltipTrigger>
                 <TooltipContent>
                     <p>{content}</p>
                 </TooltipContent>
             </Tooltip>
         </TooltipProvider>
-    )
-}
+    );
+};
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     return (
         <SidebarProvider>
-            <AppSidebar />
-            <main>
-                <div className="flex flex-row items-center gap-1">
-                    <TooltipWrapper content="Toggle sidebar">
-                        <SidebarTrigger />
-                    </TooltipWrapper>
-                    <TooltipWrapper content="Go to home 🏠">
-                        <Link
-                            href="/"
-                            data-sidebar="home"
-                            className="inline-flex h-7 w-7 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium text-black transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-                        >
-                            <HomeIcon />
-                        </Link>
-                    </TooltipWrapper>
-                </div>
-                {children}
-            </main>
+            <SidebarContextProvider>
+                <AppSidebar />
+                <main>
+                    <div className="flex flex-row items-center gap-1">
+                        <TooltipWrapper content="Toggle sidebar">
+                            <SidebarTrigger />
+                        </TooltipWrapper>
+                        <TooltipWrapper content="Go to home 🏠">
+                            <Link
+                                href="/"
+                                data-sidebar="home"
+                                className="inline-flex h-7 w-7 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium text-black transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+                            >
+                                <HomeIcon />
+                            </Link>
+                        </TooltipWrapper>
+                    </div>
+                    {children}
+                </main>
+            </SidebarContextProvider>
         </SidebarProvider>
     );
 }

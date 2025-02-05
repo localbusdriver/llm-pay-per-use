@@ -5,13 +5,15 @@ import { useSearchParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 
 import MessageSendContainer from "@/components/model/message-send-container";
-import ParameterSelector from "@/components/model/parameter-selector";
 import ResponseDisplayContainer from "@/components/model/response-display-container";
+import { useSideBarContext } from "@/components/model/sidebar-page-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 import { fetchGeminiModels, fetchOpenAIModels } from "@/lib/model-fetch";
+
+// src/app/models/page.tsx
 
 // src/app/models/page.tsx
 
@@ -21,13 +23,12 @@ interface ApiResponse {
 }
 
 const ModelPage = () => {
+    const { model, variant, key } = useSideBarContext();
+
     const [prompt, setPrompt] = useState<string>("");
     const [response, setResponse] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
-    const [model, setModel] = useState<string>("gemini-pro");
-    const [variant, setVariant] = useState<string>("gemini-pro");
-    const [key, setKey] = useState<string>("");
 
     const responseRef = useRef<HTMLDivElement>(null);
     const params = useSearchParams();

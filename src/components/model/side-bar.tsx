@@ -8,6 +8,12 @@ import {
     SidebarHeader,
 } from "@/components/ui/sidebar";
 
+const items = [
+    {
+        title: "llm in use",
+    },
+];
+
 const AppSidebar = () => {
     return (
         <Sidebar>

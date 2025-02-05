@@ -3,8 +3,6 @@
 import { ReactNode, createContext, useContext, useState } from "react";
 
 interface SidebarContextType {
-    llm: string;
-    setLlm: (llm: string) => void;
     model: string;
     setModel: (model: string) => void;
     variant: string;
@@ -20,7 +18,6 @@ export const SidebarContextProvider = ({
 }: {
     children: ReactNode;
 }) => {
-    const [llm, setLlm] = useState<string>("gemini");
     const [model, setModel] = useState<string>("gemini-pro");
     const [variant, setVariant] = useState<string>("gemini-pro");
     const [key, setKey] = useState<string>("");
@@ -28,8 +25,6 @@ export const SidebarContextProvider = ({
     return (
         <SidebarContext.Provider
             value={{
-                llm,
-                setLlm,
                 model,
                 setModel,
                 variant,
